@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0D2B3A">
+<title>現場フロー｜ダクト工事会社のための現場管理デモ</title>
+<meta name="description" content="日報を入れると、人工・出来高の請求・追加工事のもれまでつながる、ダクト工事会社向けのデモです。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="現場フロー（ダクト工事会社向けのデモ）">
+<meta property="og:description" content="日報を入れたら、請求の元までできている。スマホでもPCでも触れるデモです。">
+<meta property="og:image" content="https://nao-okada2026.github.io/duct-demo/img/og.jpg">
+<meta property="og:url" content="https://nao-okada2026.github.io/duct-demo/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 1枚のWebサイト。目印は、日報から請求までを1本につないだダクトの帯 */
+:root{color-scheme:light;--bg:#EDF1F3;--card:#fff;--ink:#10222E;--mute:#4F626F;--line:#D3DCE2;--deep:#0D2B3A;--air:#0A6C93;--air-d:#085674;--air-s:#E0EFF5;--hot:#B93E0A;--hot-s:#FCE9DD;
+--text:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;--fig:"Barlow Semi Condensed","Zen Kaku Gothic New",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:16px;line-height:1.8}
+h1,h2,h3,p,ul,ol,figure{margin:0}ul,ol{padding:0;list-style:none}img{max-width:100%;height:auto;display:block}a{color:inherit}
+:focus-visible{outline:3px solid #F0A35E;outline-offset:3px}
+.w{max-width:1120px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:0;z-index:5;background:var(--deep);color:#fff}
+header .w{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;text-decoration:none;white-space:nowrap}
+.logo svg{width:30px;height:30px;flex:none}
+nav{display:flex;gap:26px;align-items:center;font-size:14.5px}
+nav a{text-decoration:none;color:#C4D6E0;white-space:nowrap}nav a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:10px;background:var(--air);color:#fff;font-weight:700;text-decoration:none}
+.btn:hover{background:var(--air-d)}
+nav .btn{min-height:42px;padding:0 18px;background:#fff;color:var(--deep)}nav .btn:hover{background:#D9E6ED}
+.btn.line{background:none;border:1px solid #47697A;color:#fff}.btn.line:hover{background:#163E51}
+.hero{background:var(--deep);color:#fff;overflow:hidden}
+.hero .w{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:56px;align-items:end}
+.hero .tx{padding-block:72px 64px;align-self:center}
+h1{font-size:clamp(31px,4.6vw,52px);line-height:1.32;font-weight:700;letter-spacing:.01em;text-wrap:balance}
+.hero p.l{color:#BFD2DD;font-size:17px;margin-top:20px;max-width:32em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.small{font-size:13.5px;color:#9DB6C4;margin-top:16px}
+.phone{width:min(330px,82vw);border:9px solid #061A24;border-bottom:0;border-radius:40px 40px 0 0;overflow:hidden;background:#0D2B3A;margin:48px auto 0;height:520px}
+.phone img{width:100%}
+/* ダクト */
+.flow{background:#C9D6DD;border-block:1px solid #8CA2AF}
+.duct{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.duct li{background:linear-gradient(#E6EEF2,#BCCCD6 48%,#93A9B5);border-right:5px solid #536F7E;padding:22px 18px 24px;min-height:112px}
+.duct li:first-child{border-left:5px solid #536F7E}
+.duct b{display:block;font-size:19px;line-height:1.4}.duct span{font-size:14px;line-height:1.6;display:block;color:#1D3745}
+section.s{padding-block:84px}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.45;font-weight:700;text-wrap:balance}
+.lead{color:var(--mute);margin-top:12px;max-width:40em}
+.pain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;margin-top:34px}
+.pain li{border-top:1px solid #BFCBD2;padding:18px 0}
+.pain b{font-size:18px;line-height:1.6;display:block}.pain span{color:var(--mute);font-size:15px;line-height:1.7;display:block}
+.f{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:center;padding-block:52px}
+.f+.f{border-top:1px solid var(--line)}
+.f:nth-of-type(even) .pic{order:-1}
+.f h3{font-size:clamp(21px,2.4vw,27px);line-height:1.5}
+.f p{margin-top:14px;color:#2B414E}
+.f ul{margin-top:18px;display:grid;gap:8px}
+.f li{padding-left:1.1em;text-indent:-1.1em}.f li::before{content:"■";color:var(--air);font-size:.6em;vertical-align:.25em;margin-right:.75em}
+.pic{background:#D8E2E8;border-radius:14px;padding:40px 24px 0;overflow:hidden;height:470px}
+.pic img{width:min(296px,100%);margin-inline:auto;border-radius:22px 22px 0 0;box-shadow:0 10px 30px rgba(13,43,58,.22)}
+.white{background:#fff}
+.day{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:36px}
+.day li{border-top:4px solid var(--air);padding-top:16px}
+.day i{font:600 15px/1.4 var(--fig);color:var(--air-d);font-style:normal}.day b{display:block;font-size:19px;line-height:1.5;margin-top:4px}.day span{color:var(--mute);font-size:15px;line-height:1.75;display:block;margin-top:6px}
+.try{background:var(--deep);color:#fff}
+.try .lead{color:#BFD2DD}
+.win{margin-top:34px;border-radius:12px;overflow:hidden;background:#fff}
+.win .top{background:#D5DEE4;height:36px;display:flex;align-items:center;gap:8px;padding:0 14px}
+.win .top i{width:11px;height:11px;border-radius:50%;background:#9FB0BA}
+.win iframe{border:0;width:100%;height:680px;display:block;background:var(--bg)}
+.note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 26px;display:grid;gap:8px;font-size:15px;color:#2B414E}
+.note b{color:var(--ink)}
+footer{background:#08202C;color:#9DB6C4;font-size:13.5px}footer .w{padding-block:28px;display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between}
+@media(max-width:860px){
+  nav a:not(.btn){display:none}
+  .hero .w,.f{grid-template-columns:minmax(0,1fr)}.hero .w{gap:0}.hero .tx{padding-block:44px 0}
+  .phone{height:430px;margin-top:40px}
+  .duct{grid-template-columns:minmax(0,1fr)}.duct li{border:0;border-bottom:5px solid #536F7E;min-height:0;padding:16px 20px;background:linear-gradient(90deg,#E6EEF2,#BCCCD6 48%,#93A9B5)}.duct li:first-child{border-left:0;border-top:5px solid #536F7E}
+  .flow .w{padding-inline:0}
+  section.s{padding-block:58px}
+  .pain,.day{grid-template-columns:minmax(0,1fr)}
+  .f{gap:28px;padding-block:40px}.f:nth-of-type(even) .pic{order:0}
+  .pic{height:400px;padding-top:28px}
+  .win{display:none}.btn{width:100%}nav .btn{width:auto}
+}
+@media(min-width:861px){.try .m{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="w">
+  <a class="logo" href="#top"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="7" width="17" height="11" fill="#C9D6DD"/><path d="M18 7h4a7 7 0 017 7v12H18V18z" fill="#8FA6B3"/><path d="M6 7v11M12 7v11M18 7v11M18 21h11" stroke="#0D2B3A" stroke-width="1.600"/></svg>現場フロー</a>
+  <nav aria-label="メニュー"><a href="#pain">困りごと</a><a href="#can">できること</a><a href="#day">使い方</a><a class="btn" href="demo.html">デモを触る</a></nav>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="w">
+  <div class="tx">
+    <h1>日報を入れたら、<br>請求の元まで<br>できている。</h1>
+    <p class="l">ダクト工事の会社のための、現場管理のデモです。現場で1回入れた数字が、出面表にも、出来高の請求にもそのまま使われます。</p>
+    <div class="cta"><a class="btn" href="demo.html">デモを触ってみる</a><a class="btn line" href="#can">できることを見る</a></div>
+    <p class="small">登録もログインもいりません。スマホでもPCでも動きます。</p>
+  </div>
+  <div class="phone"><img src="img/today.jpg" width="780" height="1560" alt="今日の人工が現場ごとに表示されたスマホの画面"></div>
+</div></div>
+
+<div class="flow"><div class="w"><ol class="duct">
+  <li><b>日報</b><span>現場と人を選んで押すだけ</span></li>
+  <li><b>人工</b><span>現場別・職人別に自動で集計</span></li>
+  <li><b>出来高・追加工事</b><span>了承の取れたものだけが進む</span></li>
+  <li><b>請求の元</b><span>前回まで・今回・残りがそろう</span></li>
+</ol></div></div>
+
+<section class="s" id="pain"><div class="w">
+  <h2>こんなこと、ありませんか</h2>
+  <ul class="pain">
+    <li><b>月末に、日報を見て人工を数え直している</b><span>紙や電話のメモから、出面表へ書き写す。</span></li>
+    <li><b>口頭で頼まれた追加工事を、請求し忘れた</b><span>だれに、いつ言われたかが残っていない。</span></li>
+    <li><b>注文書が来ないまま、工事が始まっている</b><span>あとで金額の話がかみ合わない。</span></li>
+    <li><b>元請ごとに締め日が違い、1件もれた</b><span>気づいたときには、次の月になっている。</span></li>
+    <li><b>同じ人を、2つの現場に入れてしまった</b><span>朝になって電話で気づく。</span></li>
+    <li><b>終わってから、人工の使いすぎに気づく</b><span>途中で分かれば、手が打てた。</span></li>
+  </ul>
+</div></section>
+
+<section class="s white" id="can"><div class="w">
+  <h2>できること</h2>
+  <div class="f"><div><h3>日報は、スマホで選ぶだけ</h3><p>現場と来た人を押すと、人工がその場で出ます。電話のメモやメールの文章を貼って、読み取らせることもできます。</p><ul><li>終日・半日・残業に対応</li><li>同じ現場の2回目の報告は、足すか入れ替えるかを確認</li><li>現場や人数が分からないときは、推測せずに聞き返す</li></ul></div><div class="pic"><img loading="lazy" src="img/report.jpg" width="780" height="1560" alt="日報を入力するスマホの画面"></div></div>
+  <div class="f"><div><h3>もれそうなものを、先に知らせる</h3><p>締め日を過ぎた請求、了承待ちの追加工事、まだ届かない注文書、健康診断の期限。探しに行かなくても、1か所に並びます。</p><ul><li>追加工事は、頼んだ人と日付を残す</li><li>元請の了承が取れたものだけ、請求に入る</li></ul></div><div class="pic"><img loading="lazy" src="img/leak.jpg" width="780" height="1560" alt="請求や注文書のもれが一覧になったスマホの画面"></div></div>
+  <div class="f"><div><h3>出来高を動かすと、請求額が出る</h3><p>契約額、前回までの請求、今回、残り。電卓をたたかずに、その場でそろいます。人工精算の現場は、日報の人工からそのまま計算します。</p><ul><li>元請ごとの締め日に並ぶ</li><li>会計ソフトに入れる元の数字ができる</li></ul></div><div class="pic"><img loading="lazy" src="img/bill.jpg" width="780" height="1560" alt="出来高から請求額を計算するスマホの画面"></div></div>
+  <div class="f"><div><h3>使いすぎと、人の重なりに気づく</h3><p>進み具合と使った人工を並べて見られます。あすの段取りでは、同じ人が2現場に入っていると知らせます。</p><ul><li>工事が終わる前に、人工の先行が分かる</li><li>段取りの文をコピーして、そのまま送れる</li></ul></div><div class="pic"><img loading="lazy" src="img/plan.jpg" width="780" height="1560" alt="あすの段取りで人の重なりを知らせるスマホの画面"></div></div>
+</div></section>
+
+<section class="s" id="day"><div class="w">
+  <h2>使い方の流れ</h2>
+  <ol class="day">
+    <li><i>前の日</i><b>だれが、どこへ</b><span>段取りを決めて、文をコピーして送ります。</span></li>
+    <li><i>仕事のあと</i><b>日報を入れる</b><span>現場と人を押します。追加を頼まれたら、その場で残します。</span></li>
+    <li><i>締め日</i><b>請求の元を作る</b><span>出来高を決めて押すと、内訳ができます。</span></li>
+  </ol>
+</div></section>
+
+<section class="s try" id="try"><div class="w">
+  <h2>触ってみてください</h2>
+  <p class="lead">架空の会社のデータが入っています。何を押しても大丈夫です。ページを開き直すと、最初に戻ります。</p>
+  <div class="cta m"><a class="btn" href="demo.html">スマホでデモを開く</a></div>
+  <div class="win"><div class="top" aria-hidden="true"><i></i><i></i><i></i></div><iframe loading="lazy" src="demo.html" title="現場フローのデモ"></iframe></div>
+</div></section>
+
+<section class="s"><div class="w"><div class="note">
+  <b>このページについて</b>
+  <span>これは試作のデモで、販売中の製品ではありません。会社名・現場名・金額はすべて架空です。</span>
+  <span>文章の読み取りは、決まった書き方だけを読む見本です。AIは使っていません。</span>
+  <span>入力した内容は保存も送信もされません。実在の会社名や個人の情報は入れないでください。</span>
+</div></div></section>
+</main>
+<footer><div class="w"><span>現場フロー（デモ）</span><span>会社名・現場名・金額はすべて架空です</span></div></footer>
+</body>
+</html>
